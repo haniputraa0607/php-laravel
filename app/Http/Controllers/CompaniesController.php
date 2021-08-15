@@ -40,7 +40,27 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "company_name" => "required",
+            "company_email" => "required",
+            "company_website" => "required",
+            "company_logo" => "required|mimes:png|max:2048|dimensions:min_width=100,min_height=100"
+        ]);
+        $logo_asli = $request->file('company_logo')->getClientOriginalName();
+        $filename = pathinfo($logo_asli, PATHINFO_FILENAME);
+        $extension = $request->file('company_logo')->getClientOriginalExtension();
+        $company_logo = $filename.'_'.time().'.'.$extension;
+        $request->file('company_logo')->storeAs('company',$company_logo);
+        Company::create([
+            "company_name" => $request->company_name,
+            "company_email" => $request->company_email,
+            "company_website" => $request->company_website,
+            "company_logo" => $company_logo
+        ]);
+        return redirect("/companies")->with(
+            "status",
+            "A New Company has been added"
+        );
     }
 
     /**
