@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\{Route,Auth};
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\{HomeController, EmployeesController, CompaniesController};
 
 /*
 |--------------------------------------------------------------------------
