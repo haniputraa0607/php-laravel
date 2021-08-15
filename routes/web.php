@@ -17,3 +17,5 @@ use App\Http\Controllers\HomeController;
 
 Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::resource("companies", CompaniesController::class);
+Route::resource("employees", EmployeesController::class);
