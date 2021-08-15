@@ -105,6 +105,11 @@ class CompaniesController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        unlink(storage_path('app/company/'.$company->company_logo));
+        Company::destroy($company->company_id);
+        return redirect("/companies")->with(
+            "status",
+            "$company->company_name has been deleted"
+        ); 
     }
 }
