@@ -42,7 +42,16 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            "employee_name" => "required",
+            "employee_email" => "required",
+            "company_id" => "required",
+        ]);
+        Employee::create($request->all());
+        return redirect("/employees")->with(
+            "status",
+            "A New Employee has been added"
+        );
     }
 
     /**
@@ -64,7 +73,8 @@ class EmployeesController extends Controller
      */
     public function edit(Employee $employee)
     {
-        //
+        $companies = Company::all();
+        return view('employees.edit', ["employee" => $employee,"companies"=>$companies]);
     }
 
     /**
