@@ -94,7 +94,37 @@ class CompaniesController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $ceklogo = $request->company_logo;
+        if($ceklogo){
+            if(file_exists('storage/'.$company->company_logo)){
+                unlink(storage_path('app/company/'.$company->company_logo));
+            }
+            $logo_asli = $request->file('company_logo')->getClientOriginalName();
+            $filename = pathinfo($logo_asli, PATHINFO_FILENAME);
+            $extension = $request->file('company_logo')->getClientOriginalExtension();
+            $company_logo = $filename.'_'.time().'.'.$extension;
+            $request->file('company_logo')->storeAs('company',$company_logo);
+            $logo_rule = "required|mimes:png|max:2048|dimensions:min_width=100,min_height=100";
+        } else {
+            $company_logo = $company->company_logo;
+            $logo_rule = "mimes:png|max:2048|dimensions:min_width=100,min_height=100";
+        }
+        $request->validate([
+            "company_name" => "required",
+            "company_email" => "required",
+            "company_website" => "required",
+            "company_logo" => $logo_rule
+        ]);
+        Company::where("company_id", $company->company_id)->update([
+            "company_name" => $request->company_name,
+            "company_email" => $request->company_email,
+            "company_website" => $request->company_website,
+            "company_logo" => $company_logo
+        ]);
+        return redirect("/companies/$company->company_id")->with(
+            "status",
+            "A Company has been changed"
+        );
     }
 
     /**
