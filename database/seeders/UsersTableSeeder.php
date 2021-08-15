@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
-class UsersTableDatabase extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
