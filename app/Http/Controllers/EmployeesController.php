@@ -86,7 +86,20 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        //
+        $request->validate([
+            "employee_name" => "required",
+            "employee_email" => "required",
+            "company_id" => "required",
+        ]);
+        Employee::where("employee_id", $employee->employee_id)->update([
+            "employee_name" => $request->employee_name,
+            "employee_email" => $request->employee_email,
+            "company_id" => $request->company_id,
+        ]);
+        return redirect("employees")->with(
+            "status",
+            "An Employee has been changed"
+        );
     }
 
     /**
