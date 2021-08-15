@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class EmployeesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,9 @@ class EmployeesController extends Controller
      */
     public function index()
     {
-        //
+        $employees = Employee::join('companies', 'employees.company_id', '=', 'companies.company_id')
+               ->paginate(5,['employees.*', 'companies.company_name']);
+        return view('employees.index', compact("employees"));
     }
 
     /**
